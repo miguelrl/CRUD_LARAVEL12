@@ -6,6 +6,7 @@ use App\Http\Requests\storeUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Symfony\Component\HttpKernel\DataCollector\AjaxDataCollector;
 
 class testController extends Controller
 {
@@ -15,7 +16,7 @@ class testController extends Controller
 
     public function index()
     {
-        $usuarios = User::orderBy('name','ASC')->paginate(5);
+        $usuarios = User::orderBy('id','ASC')->paginate(5);
         return view('operaciones', compact('usuarios'));
     }
 
@@ -48,9 +49,22 @@ class testController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function buscar(Request $request)
     {
-        //
+       $response=[
+            "success"=>false,
+            "message"=>"hubo un error"
+       ];
+       if($request->ajax()){
+        $data= User::where("nombre","like",$request->name."%")->take()->get();
+                    $response=[
+                    "success"=>true,
+                    "message"=>"Consulta correcta",
+                    "data"=> $data
+            ];
+       }
+       return  response()->json($response);
+
     }
 
     /**

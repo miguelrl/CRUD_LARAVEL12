@@ -1,6 +1,7 @@
 <!doctype html>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <style>
+<html>
+  <head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">  <style>
     body {
       font-family: Arial, sans-serif;
       margin: 30px;
@@ -8,19 +9,53 @@
       overflow-x: hidden;
     }
   </style>
-<html>
-  <head>
     <meta charset="utf-8" />
+    <!--<meta name="csrf-token" content="{{csrf_token()}}">-->
     <title>Mi pagina de prueba</title>
   <script src="http://cdn.tailwindcss.com"></script>
+  
   </head>
   <body class="container">
+
               @if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
               @endif
-  <table  class="table table-hover ">
+  <!--<form action="" id="">
+    <input type="search" name="texto" id="buscar">
+  </form>-->
+  <div id="resultado"><div>
+    <script>
+      window.addEventListener("load",function(){
+          buscar.addEventListener("keyup",(e)=>{
+              fetch(`buscador`,{
+                method:'post',
+                body:JSON.stringify({texto: buscar.value}),
+                headers:{
+                  "Content-Type":"application/json",
+                  "X-Request-With":"XMLHttpRequest"
+                  //"X-CSRF-Token": document.head.querySelector("[name~=csrf-token][token]").content
+                }
+              })
+              .then(response=>{
+                return response.json()
+              })
+
+              .then(data=>{
+                //console.log(data);
+                for(var i in data.data){
+                  console.log(data.data[i].name);
+                }
+              })
+              .catch(error => {
+                  // 4. Capturar cualquier error de red o del servidor
+                  console.error('Hubo un problema con la solicitud fetch:', error);
+              });
+          })
+      })
+  </script>
+  <table  class="table table-hover " id="tabla">
     <thead>
 
       <tr>
@@ -48,7 +83,7 @@
       @foreach($usuarios as $usu)
       <tr>
         
-        <td>{{ $loop->index+1 }}</td> 
+        <td>{{$usu->id}}</td> 
         <td>{{$usu->name}}</td>
         <td>{{$usu->area}}</td>
         <td>{{$usu->employee_number}}</td>

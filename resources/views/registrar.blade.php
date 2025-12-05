@@ -84,7 +84,7 @@
             <label for="employee_number">Número de Empleado:</label>
             <input type="text" name="employee_number" id="employee_number" value="{{ old('employee_number') }}" >
             @error('employee_number')
-              <p  class="alert alert-danger" >El número de empleado es incorrecto (solo enteros)</p>
+              <p  class="alert alert-danger" >El número de empleado es incorrecto (solo enteros, deben ser 5 enteros)</p>
             @enderror
 
             <label for="address">Dirección:</label>
